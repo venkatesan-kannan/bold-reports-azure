@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SystemSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <CopyrightInformation>Copyright &amp;copy; 2001 - $$CurrentYear$$ Syncfusion Inc.   |   All Rights Reserved.</CopyrightInformation>
+  <IsEnableCopyrightInfo>true</IsEnableCopyrightInfo>
+  <InstallationFolder>TenantManagement</InstallationFolder>
+  <IsEnablePoweredBySyncfusion>true</IsEnablePoweredBySyncfusion>
+  <IsShowPoweredBySyncfusion>true</IsShowPoweredBySyncfusion>
+  <OrganizationName>Bold ID</OrganizationName>
+  <SqlConfiguration>
+  </SqlConfiguration>
+  <StorageType>0</StorageType>
+  <WelcomeNoteText>Welcome to Bold Reports On-Premise</WelcomeNoteText>
+  <TimeFormat>false</TimeFormat>
+  <DRM>5Tml1/VhCG7XTjBgs/97WjtYitWOdUgV4hVB+MPeRGYsNaNA2sJaWOlESIWrjW9QC5LGta9xEWEckmkAUFZaZTLao7a5J0u1ruqYTV3Of0fs79x1vqIUf4wEig/9fDxFzdXsO9OTYUqm+/11laahERjMdbSATjF3eF+/2TziTwvITJH/v02FSKxKXBqxsY8QmXND5zlnNwM8VwVqP8oyT6ODe4bh3nWQR+0ooDkeDQRykpnik2qlfmYS7rlg5dXNNqiyeGEXOF47nWUxzu1kn4GHdVodrYKHvKOKhX2vqRASrpwXkqjdUSo1QPGjR5/BoD89F6Maj1pLCsiVXOZPQBM640/yaNmH3xFrHbODjJK5ihUblyEW6ndjKXdJ7R5NYZJ7nIRFqhjNeXUQMp6uEcRt/gz/tDnALgDB2Jm93A27CpIcJgR+9flpprWnKPexVWyIMY5g+5wWcEKa5fRNQMSovmXn6pLF3xBQ79g7zMx8TeleZFyHflruz7lwK8TLxpfOMYYxl/SKZ5OKZMnKMy/jolEoCJTkDX6I7W+zK9exPqFOULvXHTMwDd5atmpp6c77748NpAxn4+SgUxN7roV5EPu4jbzz2wnafxBmbH4y4WPR0K9STyagiXOojgNr4HwSgaNK64h4XIue7Szd4MNDoy0VvEuD4mKrN+q4vlBia46p8IWtx7UYmXDLdwuMABXF7VQtkyb6ixyCXwEZO0xzjf9wDksQypKkXSV0yU3Bx+SfVUstgwLNbKN6Yj+PAkiHdstLlDfNhXl5tYR1fQ==</DRM>
+  <InternalAppBIUrl>
+  </InternalAppBIUrl>
+  <InternalAppReportUrl>http://localhost:58159/reporting</InternalAppReportUrl>
+  <InternalAppClientId>d7c9499a-f2c7-40e6-beff-0c9049ef4120</InternalAppClientId>
+  <InternalAppClientSecret>tkYeCsbZJeqaejD6l5hx9JWg3lOZzVbJW6oSXjK7v2P52eaUpnsrL6CmWymlPRtI0qIEB3yp4wWuRlo0wq+rxA==</InternalAppClientSecret>
+  <PreviewFeatures>
+    <Localization>false</Localization>
+  </PreviewFeatures>
+</SystemSettings>
