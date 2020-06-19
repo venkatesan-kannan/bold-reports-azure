@@ -276,6 +276,7 @@
             var userPermission = @Html.Raw(Json.Encode(Model.Item1));
             userPermission = ej.parseJSON(userPermission);
             ej.support.enableLocalizedSort = true;
+                GridLocalization();
             $("#itempermissiongrid").ejGrid({
                 dataSource: userPermission,
                 gridLines: ej.Grid.GridLines.Horizontal,

@@ -69,11 +69,13 @@ $(document).ready(function () {
         
         if (dropdownValue === "BoldReportsOnPremise") {
             item = "reports";
+            $(".select-intermediate-database, .select-storage").html(window.TM.App.LocalizationContent.SelectStorage);
             $("#header-description").html(window.TM.App.LocalizationContent.BoldReportsMultiTenancy);
             $(".site-default-text").html("").html("i.e. " + boldReportsUrl);
         }
         else if (dropdownValue === "BoldBIOnPremise") {
             item = "dashboards";
+            $(".select-intermediate-database, .select-storage").html(window.TM.App.LocalizationContent.SiteDataStore);
             $("#header-description").html(window.TM.App.LocalizationContent.BoldBiMultiTenancy);
             $(".site-default-text").html("").html("i.e. " + boldBIUrl);
         }
@@ -399,7 +401,7 @@ $(document).ready(function () {
             moveStepper("back", 2);
             $("#header-title").show();
             $("#header-title").html(window.TM.App.LocalizationContent.SelectDatabaseTitle);
-            $("#header-description").text(window.TM.App.LocalizationContent.PlaceToCreateShare + " " + window.TM.App.LocalizationContent.DashboardsDot).show();
+            $("#header-description").text(window.TM.App.LocalizationContent.PlaceToCreateShare + " " + window.TM.App.LocalizationContent.ReportsDot).show();
             $("#search-area").hide();
             $(".skip-intermediate-db-container").hide();
             $(".storage-form #system-settings-filestorage-container").hide();

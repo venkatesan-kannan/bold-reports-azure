@@ -297,6 +297,11 @@
         }
     }
 
+    function commentImageDialogClose() {
+        $("#commentImage_popup").ejDialog("close");
+        $("#commentImage_popup_image").attr('src', "");
+    }
+
     function commentSection() {
         var $ulContainer = $("#sync_report_viewer_toolbarContainer ");
         $divouter = ej.buildTag("ul.e-reportviewer-toolbarul e-ul e-horizontal ",

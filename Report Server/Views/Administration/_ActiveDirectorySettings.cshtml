@@ -9,7 +9,6 @@
 }
 
 <div id="active-directory-container" role="tabpanel" class="col-xs-12 admin-page-container @(ViewBag.ThirdPartyLogins ? string.Empty : "unlock-enterprise-features blur-content")" aria-labelledby="active-directory-settings-link" ng-controller="adSettingsController">
-
     <div class="col-md-12 import-area admin-page-header">
         <hgroup class="col-lg-6 col-md-6 col-sm-6 col-xs-12 no-padding">
             <h1 class="h2 page-title">[[[USER DIRECTORY SETTINGS]]]</h1>
@@ -45,20 +44,28 @@
 
     <div>
         <ul id="ad-tab-nav" class="nav nav-tabs" role="tablist">
-            @if (ServerAppConfig.IsSelfHosted && !isAzureApplication)
+            @if (ServerAppConfig.IsSelfHosted)
             {
                 <li role="presentation" class="active">
+
+                    <a href="#default-authentication-settings-tab" id="default-authentication-settings" aria-controls="default-authentication-settings" role="tab" data-toggle="tab">[[[General]]]</a>
+
+                </li>
+            }
+            @if (ServerAppConfig.IsSelfHosted && !isAzureApplication)
+            {
+                <li role="presentation">
                     <a href="#windows-ad-tab" id="windows-ad" aria-controls="windows-ad-tab" role="tab" data-toggle="tab">[[[Windows Active Directory]]]</a>
                 </li>
             }
-                <li role="presentation" class="@(!ServerAppConfig.IsSelfHosted ? "active" : ServerAppConfig.IsSelfHosted && isAzureApplication ? "active" : string.Empty )">
-                    <a href="#azure-ad-tab" id="azure-ad" aria-controls="azure-ad-tab" role="tab" data-toggle="tab">[[[Azure Active Directory]]]</a>
-                </li>
+            <li role="presentation" class="@(!ServerAppConfig.IsSelfHosted ? "active" : ServerAppConfig.IsSelfHosted && isAzureApplication ? "active" : string.Empty )">
+                <a href="#azure-ad-tab" id="azure-ad" aria-controls="azure-ad-tab" role="tab" data-toggle="tab">[[[Azure Active Directory]]]</a>
+            </li>
             <li role="presentation">
                 <a href="#database-settings-tab" id="database-settings" aria-controls="database-settings-tab" role="tab" data-toggle="tab">[[[Database]]]</a>
             </li>
-            @if (ServerAppConfig.IsSelfHosted)
-            {
+                @if (ServerAppConfig.IsSelfHosted)
+                {
                 <li role="presentation">
                     <a href="#auth-control-tab" id="auth-control" aria-controls="auth-control-tab" role="tab" data-toggle="tab">[[[Authentication Control]]]</a>
                 </li>
@@ -69,12 +76,13 @@
                     <a href="#openid-settings-tab" id="openid-settings" aria-controls="openid-settings-tab" role="tab" data-toggle="tab">[[[OpenID Connect]]]</a>
                 </li>
             }
-        </ul>
+            </ul>
 
         <div class="tab-content">
+            @Html.Partial("_DefaultAuthentication")
             @if (ServerAppConfig.IsSelfHosted && !isAzureApplication)
             {
-                <div role="tabpanel" class="tab-pane active" id="windows-ad-tab">
+                <div role="tabpanel" class="tab-pane" id="windows-ad-tab">
                     <form autocomplete="off" class="active-directory-form col-lg-12 admin-page-body" name="windowsAdSettingsForm" enctype="multipart/form-data" id="active-directory-setting" method="post">
                         <div class="col-md-12 form-group">
                             <div class="col-md-6 no-padding no-margin">
@@ -152,51 +160,51 @@
                     </form>
                 </div>
             }
-                <div role="tabpanel" class="tab-pane @(!ServerAppConfig.IsSelfHosted ? "active" : ServerAppConfig.IsSelfHosted && isAzureApplication ? "active" : string.Empty)" id="azure-ad-tab">
-                    <form id="azure-ad-setting" name="azureAdSettingsForm" class="admin-page-body" method="post" enctype="multipart/form-data" autocomplete="off">
-                        <div class="col-md-12 form-group">
-                            <div class="col-md-6 no-padding no-margin">
-                                <label class="app-textbox-label col-md-4 no-margin">[[[Tenant Name]]]</label>
-                                <div class="col-md-8 no-margin form-input-field" ng-class="(azureAdSettingsForm.tenantName.$dirty && azureAdSettingsForm.tenantName.$invalid) ? 'has-error' : ''">
-                                    <input type="text" class="form-control col-md-6 no-margin" ng-model="azureTenantName" ng-init="azureTenantName='@ViewBag.AzureADSetting.TenantName'" name="tenantName" placeholder="example.onmicrosoft.com" id="tenantName" ng-pattern="regex" required />
-                                    <span class="validation-message" ng-show="azureAdSettingsForm.tenantName.$error.required && azureAdSettingsForm.tenantName.$dirty ">[[[Please enter tenant name]]]</span>
-                                    <span class="validation-message" ng-show="azureAdSettingsForm.tenantName.$error.pattern ">[[[Please enter valid URL]]]</span>
-                                </div>
+            <div role="tabpanel" class="tab-pane @(!ServerAppConfig.IsSelfHosted ? "active" : ServerAppConfig.IsSelfHosted && isAzureApplication ? "active" : string.Empty)" id="azure-ad-tab">
+                <form id="azure-ad-setting" name="azureAdSettingsForm" class="admin-page-body" method="post" enctype="multipart/form-data" autocomplete="off">
+                    <div class="col-md-12 form-group">
+                        <div class="col-md-6 no-padding no-margin">
+                            <label class="app-textbox-label col-md-4 no-margin">[[[Tenant Name]]]</label>
+                            <div class="col-md-8 no-margin form-input-field" ng-class="(azureAdSettingsForm.tenantName.$dirty && azureAdSettingsForm.tenantName.$invalid) ? 'has-error' : ''">
+                                <input type="text" class="form-control col-md-6 no-margin" ng-model="azureTenantName" ng-init="azureTenantName='@ViewBag.AzureADSetting.TenantName'" name="tenantName" placeholder="example.onmicrosoft.com" id="tenantName" ng-pattern="regex" required />
+                                <span class="validation-message" ng-show="azureAdSettingsForm.tenantName.$error.required && azureAdSettingsForm.tenantName.$dirty ">[[[Please enter tenant name]]]</span>
+                                <span class="validation-message" ng-show="azureAdSettingsForm.tenantName.$error.pattern ">[[[Please enter valid URL]]]</span>
                             </div>
                         </div>
-                        <div class="col-md-12 form-group">
-                            <div class="col-md-6 no-padding no-margin">
-                                <label class="app-textbox-label col-md-4 no-margin">[[[Client Id]]]</label>
-                                <div class="col-md-8 no-margin form-input-field" ng-class="(azureAdSettingsForm.clientId.$dirty && azureAdSettingsForm.clientId.$invalid) ? 'has-error' : ''">
-                                    <input type="text" class="form-control col-md-6 no-margin" ng-model="azureClientId" name="clientId" ng-init="azureClientId='@ViewBag.AzureADSetting.ClientId'" placeholder="[[[Client Id]]]" id="clientId" required />
-                                    <span class="validation-message" ng-show="azureAdSettingsForm.clientId.$dirty && azureAdSettingsForm.clientId.$invalid">[[[Please enter client id]]]</span>
-                                </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <div class="col-md-6 no-padding no-margin">
+                            <label class="app-textbox-label col-md-4 no-margin">[[[Client Id]]]</label>
+                            <div class="col-md-8 no-margin form-input-field" ng-class="(azureAdSettingsForm.clientId.$dirty && azureAdSettingsForm.clientId.$invalid) ? 'has-error' : ''">
+                                <input type="text" class="form-control col-md-6 no-margin" ng-model="azureClientId" name="clientId" ng-init="azureClientId='@ViewBag.AzureADSetting.ClientId'" placeholder="[[[Client Id]]]" id="clientId" required />
+                                <span class="validation-message" ng-show="azureAdSettingsForm.clientId.$dirty && azureAdSettingsForm.clientId.$invalid">[[[Please enter client id]]]</span>
                             </div>
                         </div>
-                        <div class="col-md-12 form-group">
-                            <div class="col-md-6 no-padding no-margin">
-                                <label class="app-textbox-label col-md-4 no-margin">[[[Client Secret Code]]]</label>
-                                <div class="col-md-8 no-margin form-input-field" ng-class="(azureAdSettingsForm.clientKey.$dirty && azureAdSettingsForm.clientKey.$invalid) ? 'has-error' : ''">
-                                    <input type="text" style="display: none;">
-                                    <input style="visibility: hidden; position: absolute; left: -99999px" type="password" name="fake_passwordfield_to_turnoff_autocomplete">
-                                    <input type="password" class="form-control col-md-6 no-margin" value="" ng-model="azureClientKey" name="clientKey" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" id="clientKey" required />
-                                    <div class="show-hide-password su su-eye"></div>
-                                    <span class="validation-message" ng-show="azureAdSettingsForm.clientKey.$dirty && azureAdSettingsForm.clientKey.$invalid">[[[Please enter client key]]]</span>
-                                </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <div class="col-md-6 no-padding no-margin">
+                            <label class="app-textbox-label col-md-4 no-margin">[[[Client Secret Code]]]</label>
+                            <div class="col-md-8 no-margin form-input-field" ng-class="(azureAdSettingsForm.clientKey.$dirty && azureAdSettingsForm.clientKey.$invalid) ? 'has-error' : ''">
+                                <input type="text" style="display: none;">
+                                <input style="visibility: hidden; position: absolute; left: -99999px" type="password" name="fake_passwordfield_to_turnoff_autocomplete">
+                                <input type="password" class="form-control col-md-6 no-margin" value="" ng-model="azureClientKey" name="clientKey" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" id="clientKey" required />
+                                <div class="show-hide-password su su-eye"></div>
+                                <span class="validation-message" ng-show="azureAdSettingsForm.clientKey.$dirty && azureAdSettingsForm.clientKey.$invalid">[[[Please enter client key]]]</span>
                             </div>
                         </div>
-                        @if (ViewBag.ThirdPartyLogins)
-                        {
-                            <div class="col-md-12">
-                                <div class="col-md-6 no-padding no-margin">
-                                    <input type="button" id="testAzureConnection" ng-disabled="azureAdSettingsForm.$invalid" onclick="AzureADFormValidate()" class="primary-button test-connection pull-right" title="[[[Test Azure Active Directory Connection]]]" value="[[[Test Connection]]]" />
-                                </div>
-                                <div class="col-md-6 error-message" style="display: none"></div>
-                                <div class="col-md-6 success-message" style="display: none"></div>
+                    </div>
+                    @if (ViewBag.ThirdPartyLogins)
+                    {
+                        <div class="col-md-12">
+                            <div class="col-md-6 no-padding no-margin">
+                                <input type="button" id="testAzureConnection" ng-disabled="azureAdSettingsForm.$invalid" onclick="AzureADFormValidate()" class="primary-button test-connection pull-right" title="[[[Test Azure Active Directory Connection]]]" value="[[[Test Connection]]]" />
                             </div>
-                        }
-                    </form>
-                </div>
+                            <div class="col-md-6 error-message" style="display: none"></div>
+                            <div class="col-md-6 success-message" style="display: none"></div>
+                        </div>
+                    }
+                </form>
+            </div>
             <div role="tabpanel" class="tab-pane" id="database-settings-tab">
                 <div id="import-database-container" class="">
                     <div class="col-lg-12 connection-properties-form admin-page-body">
@@ -426,7 +434,6 @@
                     </div>
                 </div>
             </div>
-
             <div id="select-existing-join">
                 <div class="col-xs-12 no-padding">
                     <div class="col-xs-12 no-padding">
@@ -485,6 +492,18 @@
                 <div role="tabpanel" class="tab-pane" id="auth-control-tab">
                     <div id="auth-control-body" class="col-lg-12 col-md-12 col-sm-12 admin-page-body no-padding">
                         <form id="auth-control-form" name="authControlForm" class="auth-control-form col-lg-12 col-md-12 col-sm-12 no-padding" method="post" enctype="multipart/form-data" autocomplete="off">
+                            <div class="col-md-12 form-group">
+                                <div class="col-md-12 no-padding no-margin enable-global-default-label">
+                                    @Html.Label("enable-global-default", "[[[Enable Global Default Authentication]]]", new { @class = "app-textbox-label col-md-4 no-margin" })
+                                    <div class="col-md-8 form-input-field pull-left switch-align">
+                                        <span class="material-switch text-left">
+                                            <input type="hidden" id="default-control-type" value="@AuthType.DefaultAuth">
+                                            <input type="checkbox" id="enable-global-default" name="enableGlobalDefault" @((authControl != null && authControl.Where(x => x.AuthType == AuthType.DefaultAuth).FirstOrDefault().IsEnabled) ? "checked" : string.Empty) />
+                                            <label for="enable-global-default" class="label-primary"></label>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-12 form-group">
                                 <div class="col-md-12 no-padding no-margin enable-global-oauth-label">
                                     @Html.Label("enable-global-oauth", "[[[Enable Global OAuth Settings]]]", new { @class = "app-textbox-label col-md-4 no-margin" })
@@ -794,6 +813,7 @@
         <a href="@Url.Action("Index","Home")" class="secondary-button pull-right" id="cancel-active-dir-settings" title="">[[[Cancel]]]</a>
         @if (ServerAppConfig.IsSelfHosted)
         {
+            <button type="submit" id="update-defaultauthlogin-settings" class="primary-button pull-right update-defaultauth-settings">[[[Save]]]</button>
             if (!isAzureApplication)
             {
                 <button type="button" title="" id="update-active-dir-settings" name="UpdateSystemSettings" class="primary-button pull-right update-system-settings" ng-disabled="windowsAdSettingsForm.$invalid" ng-click="">[[[Save]]]</button>

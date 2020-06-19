@@ -413,6 +413,7 @@ $(document).ready(function () {
 			$("#update-oauth-settings").hide();
             $("#update-openid-settings").hide();
             $("#update-auth-control").hide();
+            $("#update-defaultauthlogin-settings").hide();
             $("#azure-ad-tab span.validation-message").addClass("ng-hide").parent().removeClass("has-error");
             $(".online-help-link").attr("href", userDirectoryAzure);
             var query = (window.location.search).toString();
@@ -430,6 +431,7 @@ $(document).ready(function () {
 			$("#update-oauth-settings").hide();
             $("#update-openid-settings").hide();
             $("#update-auth-control").hide();
+            $("#update-defaultauthlogin-settings").hide();
             $("#windows-ad-tab .error").hide().parent().parent().removeClass("has-error");
 			$(".online-help-link").attr("href", userDirectoryWindows);
             var query = (window.location.search).toString();
@@ -447,6 +449,7 @@ $(document).ready(function () {
             $("#change-connection").hide();
             $("#update-oauth-settings").hide();
             $("#update-openid-settings").hide();
+            $("#update-defaultauthlogin-settings").hide();
             $("#windows-ad-tab .error").hide().parent().parent().removeClass("has-error");
             $(".online-help-link").attr("href", userDirectoryAuthControl);
             var query = (window.location.search).toString();
@@ -464,6 +467,7 @@ $(document).ready(function () {
             $("#change-connection").hide();
             $("#update-openid-settings").hide();
             $("#update-auth-control").hide();
+            $("#update-defaultauthlogin-settings").hide();
             $("#windows-ad-tab .error").hide().parent().parent().removeClass("has-error");
             $(".online-help-link").attr("href", userDirectoryOauth);
             var query = (window.location.search).toString();
@@ -481,6 +485,7 @@ $(document).ready(function () {
             $("#change-connection").hide();
             $("#update-oauth-settings").hide(); 
             $("#update-auth-control").hide();
+            $("#update-defaultauthlogin-settings").hide();
             $("#windows-ad-tab .error").hide().parent().parent().removeClass("has-error");
             $(".online-help-link").attr("href", userDirectoryOpenid);
             var query = (window.location.search).toString();
@@ -488,11 +493,26 @@ $(document).ready(function () {
                 history.pushState(null, '', '?tab=openid-settings');
                 addUserDirectoryLog("openid");
             }
+        } else if ($(this).attr("id") == "default-authentication-settings") {
+            $("#update-defaultauthlogin-settings").show();
+            $("#update-openid-settings").hide();
+            $("#UpdateAzureADSettings-bottom").addClass("hidden");
+            $("#update-active-dir-settings").hide();
+            $("#save-db-settings").hide();
+            $("#connect-database").hide();
+            $("#change-connection").hide();
+            $("#update-oauth-settings").hide();
+            $("#update-auth-control").hide();
+            var query = (window.location.search).toString();
+            if (query != "?tab=default-authentication-settings") {
+                history.pushState(null, '', '?tab=default-authentication-settings');
+            }
         }
         else {
 			$("#update-oauth-settings").hide();
             $("#update-openid-settings").hide();
             $("#update-auth-control").hide();
+            $("#update-defaultauthlogin-settings").hide();
             if ($("#schema-selection").length == 0) {
                 $("#connect-database").show();
                 $("#save-db-settings").hide();
@@ -543,6 +563,7 @@ $(document).ready(function () {
 				$("#update-oauth-settings").hide();
                 $("#update-openid-settings").hide();
                 $("#update-auth-control").hide();
+                $("#update-defaultauthlogin-settings").hide();
                 $(".online-help-link").attr("href", userDirectoryAzure);
                 addUserDirectoryLog("azure");
             }
@@ -556,6 +577,7 @@ $(document).ready(function () {
 				$("#update-oauth-settings").hide();
                 $("#update-openid-settings").hide();
                 $("#update-auth-control").hide();
+                $("#update-defaultauthlogin-settings").hide();
                 $(".online-help-link").attr("href", userDirectoryDatabase);
                 addUserDirectoryLog("database");
             } 
@@ -569,6 +591,7 @@ $(document).ready(function () {
                 $("#change-connection").hide();
                 $("#update-openid-settings").hide();
                 $("#update-oauth-settings").hide();
+                $("#update-defaultauthlogin-settings").hide();
                 $(".online-help-link").attr("href", userDirectoryAuthControl);
                 addUserDirectoryLog("auth-control");
             }
@@ -581,6 +604,7 @@ $(document).ready(function () {
                 $("#change-connection").hide();
                 $("#update-openid-settings").hide();
                 $("#update-auth-control").hide();
+                $("#update-defaultauthlogin-settings").hide();
                 $(".online-help-link").attr("href", userDirectoryOauth);
                 addUserDirectoryLog("oauth");
             }
@@ -593,8 +617,20 @@ $(document).ready(function () {
                 $("#change-connection").hide();
                 $("#update-oauth-settings").hide();
                 $("#update-auth-control").hide();
+                $("#update-defaultauthlogin-settings").hide();
                 $(".online-help-link").attr("href", userDirectoryOpenid);
                 addUserDirectoryLog("openid");
+            }
+            else if (location.href.match(/default-authentication-settings/)) {
+                $("#default-authentication-settings").tab("show");
+                $("#update-openid-settings").hide();
+                $("#update-active-dir-settings").hide();
+                $("#UpdateAzureADSettings-bottom").addClass("hidden");
+                $("#save-db-settings").hide();
+                $("#connect-database").hide();
+                $("#change-connection").hide();
+                $("#update-oauth-settings").hide();
+                $("#update-auth-control").hide();
             }
 			else {
                 $("#windows-ad").tab("show");
@@ -606,6 +642,7 @@ $(document).ready(function () {
 				$("#update-oauth-settings").hide();
                 $("#update-openid-settings").hide();
                 $("#update-auth-control").hide();
+                $("#update-defaultauthlogin-settings").hide();
                 $(".online-help-link").attr("href", userDirectoryWindows);
                 addUserDirectoryLog("azure");
             }
@@ -838,7 +875,194 @@ $(document).on("click", "#upload-login-image-textbox", function () {
     $("#upload-login-image").children().find(".e-uploadinput").trigger("click");
     $("#upload-login-image").focus();
 });
+
+function authenticationDialogBoxClose() {
+    $("#default-authentication-confirmation-diolog").ejDialog("close");
+}
+
+function updateSetting(authPrefix) {
+    var authSettingsData = getAuthSettingsToPost(authPrefix);
+    $.ajax({
+        type: "POST",
+        url: window.updateauthsettingsUrl,
+        data: { AuthSettingsData: JSON.stringify(authSettingsData) },
+        beforeSend: showWaitingPopup($("#server-app-container")),
+        success: function (result) {
+            hideWaitingPopup($("#server-app-container"));
+            if (result.Status) {
+                SuccessAlert(window.Server.App.LocalizationContent.AuthenticationSettings, window.Server.App.LocalizationContent.AuthSettingsUpdated, 7000);
+                authPrefix === 'oauth' ? oauthLogoChanged = false : openidLogoChanged = false;
+            }
+            else {
+                WarningAlert(window.Server.App.LocalizationContent.AuthenticationSettings, window.Server.App.LocalizationContent.AuthSettingsUpdatedError, 7000);
+            }
+        },
+        error: function () {
+            hideWaitingPopup($("#server-app-container"));
+        }
+    });
+}
+
+function getGroupImportSettings(authType) {
+            var groupImportDiv = authType === "oauth" ? $("#oauth-group-import") : $("#openid-group-import");
+            var providerType = groupImportDiv.find("select.group-import-provider-type").val();
+            var groupImportSettings = null;
+            switch (providerType) {
+                case "CognitoAWS":
+                    groupImportSettings = {
+                        known_provider_type: providerType,
+                        cognito: {
+                            user_pool_id: groupImportDiv.find("input[name='userPoolId']").val().trim(),
+                            aws_accesskey_id: groupImportDiv.find("input[name='awsAccesskeyId']").val().trim(),
+                            aws_accesskey_secret: groupImportDiv.find("input[name='awsAccesskeySecret']").val().trim(),
+                            region: groupImportDiv.find("input[name='cognitoRegion']").val().trim(),
+                        }                        
+                    };
+                    break;
+                case "Auth0":
+                    groupImportSettings = {
+                        known_provider_type: providerType,
+                        auth0: {
+                            audience: groupImportDiv.find("input[name='audience']").val().trim(),
+                            extension_url: groupImportDiv.find("input[name='extensionUrl']").val().trim(),
+                        }
+                    };
+                    break;
+                case "Okta":
+                    groupImportSettings = {
+                        known_provider_type: providerType,
+                        okta: {
+                            api_token: groupImportDiv.find("input[name='apiToken']").val().trim(),
+                        }                        
+                    };
+                    break;
+                case "OneLogin":
+                    groupImportSettings = {
+                        known_provider_type: providerType,
+                        one_login: {
+                            api_client_id: groupImportDiv.find("input[name='apiClientId']").val().trim(),
+                            api_client_secret: groupImportDiv.find("input[name='apiClientSecret']").val().trim(),
+                            region: groupImportDiv.find("input[name='oneloginRegion']").val().trim(),
+                        }                        
+                    };
+                    break;
+
+                default:
+                    groupImportSettings = {
+                        known_provider_type: providerType,
+                    };
+                    break;
+            }
+
+            return groupImportSettings;
+        }
+
+function getAuthSettingsToPost(authPrefix) {
+    var scope = angular.element('#active-directory-container').scope();
+    var isEnabled = $("input[name='" + authPrefix + "IsEnabled']").is(":checked");
+    var authSettingsData;
+    if (isEnabled) {
+        if (authPrefix === 'oauth') {
+            authSettingsData = {
+                is_enabled: isEnabled,
+                auth_provider: $("input[name='oauthAuthenticationProvider']").val().trim(),
+                logo_url: scope.oauthLogoUrl,
+                is_logo_changed: oauthLogoChanged,
+                o_auth_auth_settings: {
+                    provider_name: $("input[name='oauthProviderName']").val().trim(),
+                    client_id: $("input[name='oauthClientId']").val().trim(),
+                    client_secret: $("input[name='oauthClientSecret']").val().trim(),
+                    authorization_end_point: $("input[name='oauthAuthorizationEP']").val().trim(),
+                    token_end_point: $("input[name='oauthTokenEP']").val().trim(),
+                    token_end_point_method: $("#token-method-type").val(),
+                    user_info_end_point: $("input[name='oauthUserInfoEP']").val().trim(),
+                    user_info_end_point_method: $("#user-info-method-type").val(),
+                    scopes: $("input[name='oauthScopes']").val().trim(),
+                    user_info_email: $("input[name='userInfoEmail']").val().trim(),
+                    user_info_firstname: $("input[name='userInfoFirstname']").val().trim(),
+                    user_info_lastname: $("input[name='userInfoLastname']").val().trim(),
+                    logo: $("input[name='oauthLogo']").val().trim(),
+                    group_import_settings: getGroupImportSettings("oauth")
+                }
+            };
+        }
+        else {
+            authSettingsData = {
+                is_enabled: isEnabled,
+                auth_provider: $("input[name='openidAuthenticationProvider']").val().trim(),
+                logo_url: scope.openidLogoUrl,
+                is_logo_changed: openidLogoChanged,
+                oidc_auth_settings: {
+                    provider_name: $("input[name='openidProviderName']").val().trim(),
+                    client_id: $("input[name='openidClientId']").val().trim(),
+                    client_secret: $("input[name='openidClientSecret']").val().trim(),
+                    identifier: $("input[name='openidIdentifier']").val().trim(),
+                    authority: $("input[name='openidAuthority']").val().trim(),
+                    logo: $("input[name='openidLogo']").val().trim(),
+                    group_import_settings: getGroupImportSettings("openid")
+                }
+            };
+        }
+    }
+    else {
+        authSettingsData = {
+            is_enabled: isEnabled,
+            auth_provider: $("input[name='" + authPrefix + "AuthenticationProvider']").val().trim()
+        };
+    }
+
+    return authSettingsData;
+}
+
 $(document).ready(function () {
+    $("#default-authentication-confirmation-diolog").ejDialog({
+        showOnInit: false,
+        allowDraggable: true,
+        enableResize: false,
+        width: "600px",
+        enableModal: true,
+        showHeader: false,
+        close: "authenticationDialogBoxClose",
+        closeOnEscape: true
+    });
+
+    $(".update-oauth-or-openid-settings").click(function () {
+        $("#default-authentication-confirmation-diolog").ejDialog("close");
+        updateSetting(this.id);
+        defaultAuthentication = "";
+    });
+
+    $('[data-id="login-provider-type"]').css('cssText', 'outline: none !important');
+    $('[data-id="login-provider-type"]').addClass("disabled");
+    if (!$("#enable-defaultauthentication").is(":checked")) {
+
+        $("#login-provider-type").prop("disabled", true);
+        $("#none-default").prop("disabled", true);
+    }
+    
+    $("#enable-defaultauthentication").click(function () {
+        $('[data-id="login-provider-type"]').css('cssText', 'outline: none !important');
+        var isChecked = $("#enable-defaultauthentication").is(":checked");
+        if (isChecked) {
+            var textValue = $('[data-id="login-provider-type"]').next().find("li:last").text();
+            $('[data-id="login-provider-type"]').removeClass("disabled").children("span:first").text(textValue);
+            if ($('[data-id="login-provider-type"]').children("span:first").text() == "None") {
+                $("#update-defaultauthlogin-settings").prop("disabled", true);
+            }
+            $("#login-provider-type").prop("disabled", false);
+            $('[data-id="login-provider-type"]').removeClass("disabled").next().find("li").removeClass("disabled");
+            if ($('[data-id="login-provider-type"]').removeClass("disabled").next().find("li:first").text() == "None") {
+                $('[data-id="login-provider-type"]').removeClass("disabled").next().find("li:first").addClass("disabled");
+            }
+        }
+        else {
+            $("#login-provider-type").prop("disabled", true);
+            $('[data-id="login-provider-type"]').addClass("disabled").children("span:first").text("None");
+            $("#none-default").prop("disabled", false);
+            $("#update-defaultauthlogin-settings").prop("disabled", false);
+        }
+    });
+
     if ($('#active-directory-container').length > 0 && $('#auth-control').length > 0) {
         addPlacehoder("body");
         $("[data-toggle='tooltip']").tooltip();
@@ -953,6 +1177,10 @@ $(document).ready(function () {
             var authControlData = [];
             authControlData.push(
                 {
+                    auth_type: $("#default-control-type").val().trim(),
+                    is_enabled: $("#enable-global-default").is(":checked")
+                },
+                {
                     auth_type: $("#oauth-control-type").val().trim(),
                     is_enabled: $("#enable-global-oauth").is(":checked")
                 },
@@ -984,88 +1212,36 @@ $(document).ready(function () {
         $(document).on("click", ".update-auth-settings", function () {
             $(".logo-container .validation-message").html("");
             var authPrefix = this.id === 'update-oauth-settings' ? 'oauth' : 'openid';
-            var authSettingsData = getAuthSettingsToPost(authPrefix);
+            var provider = this.id === 'update-oauth-settings' ? 'oauth 2.0' : 'openid connect';
+            if ((defaultAuthentication == provider) && !($("#enable-" + authPrefix).is(":checked"))) {
+                $("#default-authentication-confirmation-diolog").ejDialog("open");
+                $(".update-oauth-or-openid-settings").attr("id", authPrefix);
+            }
+            else {
+                updateSetting(authPrefix);
+            }
+        });
+
+        $(document).on("click", ".update-defaultauth-settings", function () {
+            
+            var authProvider = $("#enable-defaultauthentication").is(":checked") ? $('[data-id="login-provider-type"]').children("span:first").text().toLowerCase() == "oauth 2.0" ? "CustomOAuth" : "CustomOIDC" : "DefaultAuthentication";
 
             $.ajax({
                 type: "POST",
-                url: window.updateauthsettingsUrl,
-                data: { AuthSettingsData: JSON.stringify(authSettingsData) },
+                url: defaultauthsettingsUrl,
+                data: { AuthProvider: authProvider },
                 beforeSend: showWaitingPopup($("#server-app-container")),
                 success: function (result) {
                     hideWaitingPopup($("#server-app-container"));
-                    if (result.Status) {
-                        SuccessAlert(window.Server.App.LocalizationContent.AuthenticationSettings, window.Server.App.LocalizationContent.AuthSettingsUpdated, 7000);
-                        authPrefix === 'oauth' ? oauthLogoChanged = false : openidLogoChanged = false;
-                    } else {
-                        WarningAlert(window.Server.App.LocalizationContent.AuthenticationSettings, window.Server.App.LocalizationContent.AuthSettingsUpdatedError, 0);
-                    }
-
-                    if (typeof (result.redirectTo) !== "undefined" && result.redirectTo !== "") {
-                        window.location.href = result.redirectTo;
-                    }
+                    defaultAuthentication = $('#login-provider-type').find(":selected").text().toLowerCase();
+                    SuccessAlert(window.Server.App.LocalizationContent.AuthenticationSettings, window.Server.App.LocalizationContent.AuthSettingsUpdated, 7000);
                 },
                 error: function () {
                     hideWaitingPopup($("#server-app-container"));
+                    WarningAlert(window.Server.App.LocalizationContent.AuthenticationSettings, window.Server.App.LocalizationContent.AuthSettingsUpdatedError, 7000);
                 }
             });
         });
-
-        function getAuthSettingsToPost(authPrefix) {
-            var scope = angular.element('#active-directory-container').scope();
-            var isEnabled = $("input[name='" + authPrefix + "IsEnabled']").is(":checked");
-            var authSettingsData;
-            if (isEnabled) {
-                if (authPrefix === 'oauth') {
-                    authSettingsData = {
-                        is_enabled: isEnabled,
-                        auth_provider: $("input[name='oauthAuthenticationProvider']").val().trim(),
-                        logo_url: scope.oauthLogoUrl,
-                        is_logo_changed: oauthLogoChanged,
-                        o_auth_auth_settings: {
-                            provider_name: $("input[name='oauthProviderName']").val().trim(),
-                            client_id: $("input[name='oauthClientId']").val().trim(),
-                            client_secret: $("input[name='oauthClientSecret']").val().trim(),
-                            authorization_end_point: $("input[name='oauthAuthorizationEP']").val().trim(),
-                            token_end_point: $("input[name='oauthTokenEP']").val().trim(),
-                            token_end_point_method: $("#token-method-type").val(),
-                            user_info_end_point: $("input[name='oauthUserInfoEP']").val().trim(),
-                            user_info_end_point_method: $("#user-info-method-type").val(),
-                            scopes: $("input[name='oauthScopes']").val().trim(),
-                            user_info_email: $("input[name='userInfoEmail']").val().trim(),
-                            user_info_firstname: $("input[name='userInfoFirstname']").val().trim(),
-                            user_info_lastname: $("input[name='userInfoLastname']").val().trim(),
-                            logo: $("input[name='oauthLogo']").val().trim(),
-                            group_import_settings: getGroupImportSettings("oauth")
-                        }
-                    };
-                }
-                else {
-                    authSettingsData = {
-                        is_enabled: isEnabled,
-                        auth_provider: $("input[name='openidAuthenticationProvider']").val().trim(),
-                        logo_url: scope.openidLogoUrl,
-                        is_logo_changed: openidLogoChanged,
-                        oidc_auth_settings: {
-                            provider_name: $("input[name='openidProviderName']").val().trim(),
-                            client_id: $("input[name='openidClientId']").val().trim(),
-                            client_secret: $("input[name='openidClientSecret']").val().trim(),
-                            identifier: $("input[name='openidIdentifier']").val().trim(),
-                            authority: $("input[name='openidAuthority']").val().trim(),
-                            logo: $("input[name='openidLogo']").val().trim(),
-                            group_import_settings: getGroupImportSettings("openid")
-                        }
-                    };
-                }
-            }
-            else {
-                authSettingsData = {
-                    is_enabled: isEnabled,
-                    auth_provider: $("input[name='" + authPrefix + "AuthenticationProvider']").val().trim()
-                };
-            }
-
-            return authSettingsData;
-        }
 
         $(document).on("click", ".image-upload", function (e) {
             var authLogo = this.name === "oauthLogoUrl" ? scope.oauthLogoUrl : scope.openidLogoUrl;
@@ -1163,59 +1339,5 @@ $(document).ready(function () {
                     break;
             }
         });
-
-        function getGroupImportSettings(authType) {
-            var groupImportDiv = authType === "oauth" ? $("#oauth-group-import") : $("#openid-group-import");
-            var providerType = groupImportDiv.find("select.group-import-provider-type").val();
-            var groupImportSettings = null;
-            switch (providerType) {
-                case "CognitoAWS":
-                    groupImportSettings = {
-                        known_provider_type: providerType,
-                        cognito: {
-                            user_pool_id: groupImportDiv.find("input[name='userPoolId']").val().trim(),
-                            aws_accesskey_id: groupImportDiv.find("input[name='awsAccesskeyId']").val().trim(),
-                            aws_accesskey_secret: groupImportDiv.find("input[name='awsAccesskeySecret']").val().trim(),
-                            region: groupImportDiv.find("input[name='cognitoRegion']").val().trim(),
-                        }                        
-                    };
-                    break;
-                case "Auth0":
-                    groupImportSettings = {
-                        known_provider_type: providerType,
-                        auth0: {
-                            audience: groupImportDiv.find("input[name='audience']").val().trim(),
-                            extension_url: groupImportDiv.find("input[name='extensionUrl']").val().trim(),
-                        }
-                    };
-                    break;
-                case "Okta":
-                    groupImportSettings = {
-                        known_provider_type: providerType,
-                        okta: {
-                            api_token: groupImportDiv.find("input[name='apiToken']").val().trim(),
-                        }                        
-                    };
-                    break;
-                case "OneLogin":
-                    groupImportSettings = {
-                        known_provider_type: providerType,
-                        one_login: {
-                            api_client_id: groupImportDiv.find("input[name='apiClientId']").val().trim(),
-                            api_client_secret: groupImportDiv.find("input[name='apiClientSecret']").val().trim(),
-                            region: groupImportDiv.find("input[name='oneloginRegion']").val().trim(),
-                        }                        
-                    };
-                    break;
-
-                default:
-                    groupImportSettings = {
-                        known_provider_type: providerType,
-                    };
-                    break;
-            }
-
-            return groupImportSettings;
-        }
     }
 });  

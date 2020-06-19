@@ -52,7 +52,7 @@
                 {
                     for (var i = 0; i < Model.Count; i++)
                     {
-                        <a class="dns-link site-row-container" href="@Model[i].DNS/@tenantIdentifierPrefix/@Model[i].TenantIdentifier" target="_blank">
+                        <a class="dns-link site-row-container" rel="alternate" hreflang="en" href="@(EarlyUrlLocalizer.IgnoreLocalizationUrlPrefix)@Model[i].DNS/@tenantIdentifierPrefix/@Model[i].TenantIdentifier" target="_blank">
                             <div class="user-dns">
                                 <div class="image-div site-logo-container">
                                     <div class="lazyload img-loader" data-class="site-logo" data-id="homepagelogo" data-src="@Url.Content(Model[i].DNS + "/" + tenantIdentifierPrefix + "/" + Model[i].TenantIdentifier + "/get-client-logo")" data-alt="boldbi" data-width="110px" data-height="25px" data-default="this.onerror=null;this.src='/Content/Images/@GlobalAppSettings.Branding/Application/@IconFileNames.LoginLogo'"></div>

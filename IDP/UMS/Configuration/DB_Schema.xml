@@ -726,6 +726,7 @@
     <ModifiedBy>ModifiedBy</ModifiedBy>
     <CreatedDate>CreatedDate</CreatedDate>
     <ModifiedDate>ModifiedDate</ModifiedDate>
+    <IsDefaultAuthentication>IsDefaultAuthentication</IsDefaultAuthentication>
     <IsActive>IsActive</IsActive>
   </DB_AuthSettings>
 </DB_TenantManagement>

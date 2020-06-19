@@ -14,20 +14,39 @@
     <script type="text/javascript">
         var ssoSettingsUrl = "@Url.Action("SAMLSettings", "Administration")";
         var updatesamlsettingsUrl = "@Url.Action("UpdateSAMLSettings", "Administration")";
-        var unloadAppDomainUrl= "@unloadAppDomainUrl";
+        var unloadAppDomainUrl = "@unloadAppDomainUrl";
+
         serverApp.controller("ssoController",
             [
-                "$scope", "ajaxService", function($scope, ajaxService) {
+                "$scope", "ajaxService", function ($scope, ajaxService) {
 
                     $scope.tenantRegex =
                         '^(?!(ftp|https?):\/\/)([a-zA-Z0-9-_]+\.)*[a-zA-Z0-9][a-zA-Z0-9-]+(\.[a-z]{2,6})?(:\d{1,5})?(\/[a-zA-Z0-9]+[a-zA-Z0-9]*(\.[a-z]{2,8})?)*?$';
-                    $scope.init = function() {
+                    $scope.init = function () {
                         $scope.ssoSettings = @Html.Raw(Json.Encode(Model));
                     };
 
-                    $scope.saveSsoSettings = function() {
+                    $scope.saveSsoSettings = function () {
+                            updateSetting();
+                    };
+
+                    $scope.confirmSsoSetting = function () {
+                        $("#default-authentication-confirmation-diolog").ejDialog("close");
+                        updateSetting();
+                    };
+
+                    $scope.hideValidationMessage = function (data) {
+                        if (!data) {
+                            $("span.validation-message").addClass("ng-hide");
+                            $("#update-saml-settings").prop("disabled", false);
+                        } else if ($scope.ssoSettingsForm.$invalid) {
+                            $("#update-saml-settings").prop("disabled", true);
+                        }
+                    };
+
+                    function updateSetting() {
                         ajaxService.postJsonData(updatesamlsettingsUrl, { "samlSettingsData": $scope.ssoSettings })
-                            .then(function(data) {
+                            .then(function (data) {
                                 $scope.categories = data;
                                 if (data) {
                                     var messageText =
@@ -36,13 +55,13 @@
                                         "[[[SSO Settings]]]",
                                         messageText,
                                         "success",
-                                        function() {
+                                        function () {
                                             onCloseMessageBox();
                                             $.post(unloadAppDomainUrl,   // url
                                                 { myData: '' }, // data to be submit
                                                 function (data, status) {// success callback
                                                     if (data.status) {
-                                                    location.href = ssoSettingsUrl;
+                                                        location.href = ssoSettingsUrl;
                                                     }
                                                 });
                                         });
@@ -51,29 +70,19 @@
                                 }
                             });
                     };
-
-                    $scope.hideValidationMessage = function(data) {
-                        if (!data) {
-                            $("span.validation-message").addClass("ng-hide");
-                            $("#update-saml-settings").prop("disabled", false);
-                        } else if ($scope.ssoSettingsForm.$invalid) {
-                            $("#update-saml-settings").prop("disabled", true);
-                        }
-                    };
                 }
             ]);
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             addPlacehoder("body");
             $("[data-toggle='popover']").popover({
                 container: 'body'
             });
-
             function addPlacehoder(object) {
                 if (regexIe8.test(userAgent)) {
                     $(object).find(
-                            "input[type=text][class!='hidden-input'],input[type=password][class!='hidden-input'],textarea[id='txt_welcome_note']")
-                        .each(function() {
+                        "input[type=text][class!='hidden-input'],input[type=password][class!='hidden-input'],textarea[id='txt_welcome_note']")
+                        .each(function () {
                             if ($(this).val() === "") {
                                 $($("<div>", { "class": "placeholder", text: $(this).attr("placeholder") }))
                                     .insertAfter(this).show();
@@ -88,6 +97,17 @@
                         });
                 }
             }
+            
+            $("#default-authentication-confirmation-diolog").ejDialog({
+                showOnInit: false,
+                allowDraggable: true,
+                enableResize: false,
+                width: "600px",
+                enableModal: true,
+                showHeader: false,
+                close: "authenticationDialogBoxClose",
+                closeOnEscape: true
+            });
         });
 
         $(document).on('click',
@@ -121,8 +141,8 @@
 
 @section MainSection{
     @Html.Partial("_AdminMenu")
-
     <div id="saml-container" class="admin-page-container @((ViewBag.ThirdPartyLogins ||  ViewBag.WhiteLabel ) ? string.Empty : "unlock-enterprise-features")" ng-controller="ssoController" ng-init="init()">
+        @Html.Partial("_DiologBox")
         <div class="col-lg-12 col-md-12 col-sm-12 admin-page-header blur-whitelable-content">
             <hgroup>
                 <h1 class="page-title">[[[SINGLE SIGN-ON SETTINGS]]]</h1>

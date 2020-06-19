@@ -449,10 +449,7 @@ $(document).on("click", "#schedule-submit", function () {
     if (isEmailcontentChanged == 0 && emailContent != "" && emailContent != null) {
         scheduleItem.EmailContent = cursorPos.value();
     }
-    if (isSubjectcontentChanged == 1) {
-        scheduleItem.Subject = $('#sub_email-text-box').val();
-    }
-    if (isSubjectcontentChanged == 0 && Subject != "" && Subject != null) {
+    if (isSubjectcontentChanged == 1 || (isSubjectcontentChanged == 0 && Subject != "" && Subject != null)) {
         scheduleItem.Subject = $('#sub_email-text-box').val();
     }
 

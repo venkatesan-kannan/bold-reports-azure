@@ -3,6 +3,7 @@ var datasourceContentHeight = "";
 var currentDatasourceTypeSelection = "new-datasource";
 
 $(document).ready(function () {
+    GridLocalization();
     datasourceContentHeight = window.innerHeight - ($(".dialog-body-div").outerHeight(true) - $(".dialog-body-div").outerHeight()) - $(".modal-header").outerHeight() - $(".modal-footer").outerHeight() - $(".datasource-options").outerHeight();
     $("#new-datasource-dialog-content, #existing-datasource-dialog-content").css("height", datasourceContentHeight);
     waitingPopUpElement = parent.$("#create-dataset-popup");

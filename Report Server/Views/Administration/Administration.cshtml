@@ -50,8 +50,9 @@
     var userDirectoryOpenid = helpSiteBaseUrl + "/site-settings/openid-settings";
     var updateauthsettingsUrl = "@Url.Action("UpdateAuthenticationSettings", "Administration")";
     var updateauthcontrolUrl = "@Url.Action("UpdateAuthControl", "Administration")";
+    var defaultauthsettingsUrl = "@Url.Action("UpdateDefaultAuthentication", "Administration")";
+    var defaultAuthentication = "@(ViewBag.DefaultAuthentication == 0 ? "" : ViewBag.DefaultAuthentication.ToString() == "CustomOAuth" ? "oauth 2.0" : "openid connect")";
     var isAzureApplication = "@isAzureApplication".toLowerCase();
-
 
     $(function() {
         $(document).click(function(e){
@@ -110,7 +111,7 @@
             });
 
         function addUserDirectoryLog(tabName) {
-		var resultName = "";
+            var resultName = "";
             switch (tabName) {
                 case "site":
                     resultName = "SiteSettings";
@@ -136,7 +137,7 @@
                 default:
                     resultName = "";
             }
-			
+
             $.ajax({
                 type: "POST",
                 url: addUserDirectoryLogUrl,
@@ -150,6 +151,7 @@
 
 @section MainSection{
     @Html.Partial("_AdminMenu")
+    @Html.Partial("_DialogBox")
     @if (isSitesPage && !isADPage)
     {
         @Html.Partial("_SiteSettings")

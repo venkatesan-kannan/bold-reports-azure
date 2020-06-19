@@ -963,7 +963,7 @@
             AuthControlUpdatedError: "[[[Error while updating authentication control settings.]]]",
             AuthenticationSettings: "[[[Authentication Settings]]]",
             AuthSettingsUpdated: "[[[Authentication settings have been updated.]]]",
-            AuthSettingsUpdatedError: "[[[Error while updating authentication settings.]]]",
+            AuthSettingsUpdatedError: "[[[An error occurred while updating authentication settings.]]]",
             AuthImageAllowedFormat: "[[[JPG and PNG image formats only allowed]]]",
             AuthImageAllowedSize: "[[[Image size should be less than 500KB]]]",
 			

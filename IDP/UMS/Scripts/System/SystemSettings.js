@@ -4,7 +4,7 @@ var isKeyUp = false;
 var ruleName;
 var rules;
 var errorContent = "";
-var databaseValidationMessage = window.TM.App.LocalizationContent.OneOrMoreErrors + " " + window.TM.App.LocalizationContent.Click + "<a id='know-more-error'>" + window.TM.App.LocalizationContent.Here + "</a> " + window.TM.App.LocalizationContent.KnowMore + ".";
+var databaseValidationMessage = window.TM.App.LocalizationContent.OneOrMoreErrors + " " + window.TM.App.LocalizationContent.Click + " " + "<a id='know-more-error'>" + window.TM.App.LocalizationContent.Here + "</a> " + window.TM.App.LocalizationContent.KnowMore + ".";
 var isToGetIntermediateDbDetails = false;
 var systemSettingsDetails, intermediateDbDetails;
 var isNewServerDB = true, isNewIntermediateDB = true;

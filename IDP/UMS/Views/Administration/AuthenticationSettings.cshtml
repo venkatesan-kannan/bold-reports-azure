@@ -13,7 +13,9 @@
     <script type="text/javascript">
         var authSettingsUrl = "@Url.Action("AuthenticationSettings", "Administration")";
         var updateauthsettingsUrl = "@Url.Action("UpdateAuthSettings", "Administration")";
+        var defaultauthsettingsUrl = "@Url.Action("EnableDefaultauth", "Administration")";
         var unloadAppDomainUrl = "@unloadAppDomainUrl";
+        var defaultAuthentication = "@(ViewBag.DefaultAuthentication == 0 ? "" : ViewBag.DefaultAuthentication.ToString() == "CustomOAuth" ? "oauth 2.0" : "openid connect")";
         var baseRootUrl = "@Url.Content("~/")";
         if (baseRootUrl.toLowerCase() === "/")
             baseRootUrl = "";
@@ -24,7 +26,7 @@
 
 @section MainSection{
     @Html.Partial("_AdminMenu")
-
+    @Html.Partial("_DiologBox")
     <div id="active-directory-container" role="tabpanel" class="col-xs-12 admin-page-container @(ViewBag.ThirdPartyLogins ? string.Empty : "unlock-enterprise-features blur-content")" aria-labelledby="active-directory-settings-link" ng-controller="adSettingsController">
         <div class="col-md-12 import-area admin-page-header">
             <hgroup class="col-lg-6 col-md-6 col-sm-6 col-xs-12 no-padding">
@@ -35,8 +37,13 @@
 
         <div>
             <ul id="ad-tab-nav" class="nav nav-tabs" role="tablist">
+                <li role="presentation">
+                    
+                        <a href="#default-authentication-settings-tab" id="default-authentication-settings" aria-controls="default-authentication-settings" role="tab" data-toggle="tab">[[[General]]]</a>
+                    
+                </li>
                 <li role="presentation" class="active">
-                    <a href="#oauth-settings-tab" id="oauth-settings" aria-controls="oauth-settings-tab openid-settings-tab" role="tab" data-toggle="tab">[[[OAuth 2.0]]]</a>
+                    <a href="#oauth-settings-tab" id="oauth-settings" aria-controls="oauth-settings-tab" role="tab" data-toggle="tab">[[[OAuth 2.0]]]</a>
                 </li>
                 <li role="presentation">
                     <a href="#openid-settings-tab" id="openid-settings" aria-controls="openid-settings-tab" role="tab" data-toggle="tab">[[[OpenID Connect]]]</a>
@@ -44,6 +51,7 @@
             </ul>
 
             <div class="tab-content">
+                @Html.Partial("_DefaultAuthentication")
                 <div role="tabpanel" class="tab-pane active" id="oauth-settings-tab">
                     <div id="oauth-page-body" class="col-lg-12 col-md-12 col-sm-12 admin-page-body no-padding">
                         <form id="oauth-setting" name="oauthSettingsForm" class="auth-settings-form col-lg-12 col-md-12 col-sm-12 no-padding" method="post" enctype="multipart/form-data" autocomplete="off">
@@ -219,7 +227,7 @@
                             </div>
                             <div id="oauth-group-import" class="group-import">
                                 @Html.Partial("_AuthenticationGroupImportSettings", (AuthGroupImportSettings)ViewBag.OAuthSettings.OAuthAuthSettings.GroupImportSettings, new ViewDataDictionary { { "AuthType", AuthType.OAuth } })
-                            </div>                            
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -344,6 +352,7 @@
 
         <div class="admin-page-actions col-lg-12 col-md-12">
             <a href="@Url.Content("~/")" class="secondary-button pull-right" id="cancel-active-dir-settings" title="">[[[Cancel]]]</a>
+            <button type="submit" id="update-defaultauthlogin-settings" class="primary-button pull-right update-defaultauth-settings">[[[Save]]]</button>
             <button type="submit" id="update-oauth-settings" class="primary-button pull-right update-auth-settings" ng-disabled="oauthSettingsForm.$invalid">[[[Save]]]</button>
             <button type="submit" id="update-openid-settings" class="primary-button pull-right update-auth-settings" ng-disabled="openidSettingsForm.$invalid">[[[Save]]]</button>
         </div>

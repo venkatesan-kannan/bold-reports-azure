@@ -181,11 +181,11 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function (e) {
     var target = $(e.target).attr("href"); // activated tab
     var data;
 
-    if (target === "#application-tab") {
+    if (target.indexOf("#application-tab") !== -1) {
         data = "general";
     }
 
-    else if (target === "#users-tab") {
+    else if (target.indexOf("#users-tab") !== -1) {
         data = "users";
         if (!isUserTabLoaded) {
             getAppUsers();
@@ -193,7 +193,7 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function (e) {
         }
     }
 
-    else if (target === "#groups-tab") {
+    else if (target.indexOf("#groups-tab") !== -1) {
         data = "groups";
         if (!isGroupTabLoaded) {
             getAppGroups();
@@ -201,7 +201,7 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function (e) {
         }
     }
 
-    else if (target === "#admins-tab") {
+    else if (target.indexOf("#admins-tab") !== -1) {
         data = "admins";
         if (!isAdminTabLoaded) {
             getAppAdmins();

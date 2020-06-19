@@ -22,18 +22,6 @@
     $("#ReportProcessOption_schedule_popup_wrapper").ejWaitingPopup();
     $("#ReportProcessOption_popup_wrapper").ejWaitingPopup();
 
-    $("#update-data-source-popup").ejDialog({
-        width: "760px",
-        showOnInit: false,
-        allowDraggable: true,
-        enableResize: false,
-        title: "Update Datasource",
-        enableModal: true,
-        showHeader: false
-    });
-    $("#update-data-source-popup_wrapper").ejWaitingPopup();
-
-
     $(document).on("click", ".item-edit", function(event) {
         $("#report_popup").ejDialog("open");
         ShowWaitingProgress("#report_popup_wrapper", "show");

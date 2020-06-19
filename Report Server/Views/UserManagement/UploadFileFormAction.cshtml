@@ -52,6 +52,7 @@
         $(document).ready(function() {
             $(function () {
                 var data = data1.Data.Data;
+                GridLocalization();
                 $("#user_import_grid").ejGrid({
                     dataSource: data,
                     gridLines: ej.Grid.GridLines.None,
@@ -60,7 +61,6 @@
                     allowSelection: false,
                     allowScrolling: false,
                     actionBegin: "fnUploadFileActionBegin",
-                    locale: "en-us",
                     enableAltRow: false,
                     enableRowHover: true,
                     actionComplete:"onComplete",

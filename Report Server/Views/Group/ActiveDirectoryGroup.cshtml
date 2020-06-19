@@ -59,7 +59,8 @@
                 }
             });
         });
-        $(document).ready(function() {
+        $(document).ready(function () {
+            GridLocalization();
             $("#search-ad-groups").val("");
             addPlacehoder("#search-area");
             var data = @Html.Raw(Json.Encode(ViewBag.ActiveDirectoryGroups));
@@ -75,7 +76,6 @@
                 allowScrolling: false,
                 allowFiltering: true,
                 allowSearching: true,
-                locale: "en-US",
                 selectionType: ej.Grid.SelectionType.Multiple,
                 dataBound: function () {
                     $('[data-toggle="tooltip"]').tooltip();

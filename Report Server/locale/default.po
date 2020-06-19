@@ -5561,6 +5561,12 @@ msgstr ""
 #: Views\Shared\_ScheduleRecipients.cshtml:63
 #: Views\Shared\_ScheduleRecipients.cshtml:66
 #: Views\UserManagement\_AddUserInGroup.cshtml:31
+#: Views\Items\_DataSourceSupportList.cshtml:9909
+#: Views\Shared\_SchedulerDialog.cshtml:63
+#: Views\Permission\_AddGroupPermission.cshtml:123
+#: Views\Permission\_AddUserPermission.cshtml:123
+#: Views\Report\_ProcessOptions.cshtml:123
+#: Views\Shared\_EmailEditor.cshtml:123
 msgid "No results match"
 msgstr ""
 
@@ -9109,14 +9115,14 @@ msgstr ""
 
 #: Views\ServerConfiguration\IncludeAdminGroup.cshtml:86
 msgid ""
-"The existing group \"Bold Reports On-Premise System Administrator\" in the "
+"The existing group \"Bold Reports Enterprise Reporting System Administrator\" in the "
 "User Management Server will be removed and a new group with the same name "
 "will be added. It is the Admin group for Report Server."
 msgstr ""
 
 #: Views\ServerConfiguration\IncludeAdminGroup.cshtml:76
 msgid ""
-"The existing group \"Bold Reports On-Premise System Administrator\" in the "
+"The existing group \"Bold Reports Enterprise Reporting System Administrator\" in the "
 "User Management Server will be used as the Admin group for Report Server."
 msgstr ""
 
@@ -10917,4 +10923,20 @@ msgstr ""
 
 #: Views\Payment\_BillingAddressInputElements.cshtml:69
 msgid "ZIP Code"
+msgstr ""
+
+#: Views\Administration\_ActiveDirectorySettings.cshtml:3111
+msgid "Enable Global Default Authentication"
+msgstr ""
+
+#: Views\Administration\_DefaultAuthtentication.cshtml:3111
+msgid "Enable Default Authentication"
+msgstr ""
+
+#: Views\Administration\_DefaultAuthtentication.cshtml:3111
+msgid "Default Authentication Provider"
+msgstr ""
+
+#: Views\Administration\_DefaultAuthtentication.cshtml:3111
+msgid "None"
 msgstr ""

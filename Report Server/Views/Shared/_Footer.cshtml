@@ -9,10 +9,18 @@
     var separatorFooterClass = (globalAppSettings.SystemSettings.IsEnablePoweredBySyncfusion || globalAppSettings.SystemSettings.IsEnableCopyrightInfo) ? "show" : "hide";
     var nativeNameTitleCase = Context.GetPrincipalAppLanguageForRequest().GetNativeNameTitleCase();
     var isMobile = DeviceDetection.IsMobile;
+    var isStartup = ViewBag.startupvalue;
+    var userPreferenceDetails = new UserPreference();
+    if (isStartup == null)
+    {
+        userPreferenceDetails = new UserManagement(globalAppSettings).GetUserPreferenceDetails(Convert.ToInt32((HttpContext.Current.User as ServerPrincipal).UserId));
+    }
+    string updateLangTag = string.Empty;
 }
 
-<div id="base-footer-div">
 
+<div id="base-footer-div">
+    
     <footer>
         @if (!isMobile)
         {
@@ -52,6 +60,7 @@
                                     for (i = 1; i < cellcnt;)
                                     {
                                         bool lastRow = i + maxcols >= cellcnt;
+
                                         <ul class="@(Html.Raw((i % 2) == 0 ? " even" : "odd")) @(Html.Raw(lastRow ? "last" : "")) dropdown-menu" aria-labelledby="dropdownMenu2">
                                             @for (int j = 0; j < maxcols && i < cellcnt; ++i, ++j)
                                             {
@@ -71,8 +80,12 @@
                                                     nativelangname = lt.NativeNameTitleCase;
                                                 }
                                                 <li>
-                                                    <a href="@Url.Action("SetLanguage", "Accounts", new { langtag = langtag, returnUrl = Request.Url })" title=@title><span>@nativelangname</span></a>
+                                                    <a href="@Url.Action("SetLanguage", "Accounts", new { langtag = langtag, returnUrl = Request.Url })" id="userpreference" title=@title><span>@nativelangname</span></a>
                                                 </li>
+                                                if (nativeNameTitleCase == nativelangname)
+                                                {
+                                                    updateLangTag = langtag;
+                                                }
                                             }
                                             @if (lastRow)
                                             {
@@ -84,6 +97,16 @@
                                         </ul>
                                         <span class="pull-left @separatorparagraphClass" id="footer-separator">  | </span>
                                         <p class="no-margin pull-left @copyrightClass" id="copyrightinfo"> @Html.Raw(globalAppSettings.SystemSettings.CopyrightInformation.Replace("$$CurrentYear$$", DateTime.UtcNow.Year.ToString()))</p>
+                                    }
+                                }
+                                if (isStartup == null)
+                                {
+                                    if (updateLangTag != userPreferenceDetails.LanguageSettings.Language)
+                                    {
+                                        <a href="@Url.Action("SetLanguage", "Accounts", new { langtag = updateLangTag, returnUrl = Request.Url })" id="updateUserPreferenceLink" hidden></a>
+                                        <script type="text/javascript">
+                                            $('#updateUserPreferenceLink').get(0).click();
+                                        </script>
                                     }
                                 }
                             }

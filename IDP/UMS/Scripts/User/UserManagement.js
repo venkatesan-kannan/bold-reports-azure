@@ -806,14 +806,14 @@ function deleteSingleUser() {
             if (data.AzureADUserCount == 0) {
                 $("#azure-ad-indication").html("");
             }
-            parent.messageBox("su-open", window.TM.App.LocalizationContent.DeleteUser, window.TM.App.LocalizationContent.UserHasDeleted, "success", function () {
+            parent.messageBox("su-delete", window.TM.App.LocalizationContent.DeleteUser, window.TM.App.LocalizationContent.UserHasDeleted, "success", function () {
                 parent.onCloseMessageBox();
             });
             onConfirmDeleteUser("1");
             $("#singleuser-delete-confirmation").ejWaitingPopup("hide");
             $("#singleuser-delete-confirmation").ejDialog("close");
         } else {
-            parent.messageBox("su-open", window.TM.App.LocalizationContent.DeleteUser, window.TM.App.LocalizationContent.FailedToDeleteUser, "error", function () {
+            parent.messageBox("su-delete", window.TM.App.LocalizationContent.DeleteUser, window.TM.App.LocalizationContent.FailedToDeleteUser, "error", function () {
                 parent.onCloseMessageBox();
             });
         }

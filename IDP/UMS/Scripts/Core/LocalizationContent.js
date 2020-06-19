@@ -23,7 +23,7 @@
             OpenIDUpdatedRestartText: "[[[OpenID Connect settings have been updated. The application will restart automatically in order to apply the changes.]]]</br></br>[[[Note: If the changes are not reflected, we recommend you to restart the application manually.]]]",
             AuthenticationSettings: "[[[Authentication Settings]]]",
             AuthSettingsUpdated: "[[[Authentication settings have been updated.]]]",
-            AuthSettingsUpdatedError: "[[[Error while updating authentication settings.]]]",
+            AuthSettingsUpdatedError: "[[[An error occurred while updating authentication settings.]]]",
             AuthImageAllowedFormat: "[[[JPG and PNG image formats are supported.]]]",
             AuthImageAllowedSize: "[[[Image size should be less than 500 KB.]]]",
             SelectAuthProviderLogo: "[[[Please select the provider logo.]]]",
@@ -178,6 +178,7 @@
             PlaceToCreateShare: "[[[The place where you will create and share your]]]",
             AddTenant: "[[[Select Storage]]]",
             DashboardsDot: "[[[dashboards.]]]",
+            ReportsDot: "[[[reports.]]]",
             ConfigureDataStore: "[[[Configure Data Store]]]",
             Name: "[[[Name]]]",
             UpdateSite: "[[[Update Site]]]",
@@ -188,6 +189,8 @@
             CreateLaunchSite: "[[[Create and launch site]]]",
             UpdateButton: "[[[Update]]]",
             SiteCreation: "[[[Site Creation]]]",
+            SiteDataStore: "[[[SELECT DATA STORE]]]",
+            SelectStorage: "[[[SELECT STORAGE]]]",
 
             //ViewSite.js
             AddAdministrators: "[[[Add Administrators]]]",

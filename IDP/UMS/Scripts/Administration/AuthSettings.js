@@ -34,6 +34,17 @@ $(document).ready(function () {
         }
     }
 
+    $("#default-authentication-confirmation-diolog").ejDialog({
+        showOnInit: false,
+        allowDraggable: true,
+        enableResize: false,
+        width: "600px",
+        enableModal: true,
+        showHeader: false,
+        close: "authenticationDialogBoxClose",
+        closeOnEscape: true
+    });
+
     $(document).on('click',
         function (e) {
             if ($(".popover").children().hasClass("popover-content")) {
@@ -87,13 +98,52 @@ $(document).ready(function () {
         }
     });
 
+    $('[data-id="login-provider-type"]').css('cssText', 'outline: none !important');
+    $('#login-provider-type').css('cssText', 'outline: none !important');
+
+    if (!$("#enable-defaultauthentication").is(":checked")) {
+        //$("#update-defaultauthlogin-settings").prop("disabled", true);
+        $("#login-provider-type").prop("disabled", true);
+    }
+
+    $("#enable-defaultauthentication").click(function () {
+        $('[data-id="login-provider-type"]').css('cssText', 'outline: none !important');
+        var isChecked = $("#enable-defaultauthentication").is(":checked");
+        if (isChecked) {
+            var textValue = $('[data-id="login-provider-type"]').next().find("li:last").text();
+            $('[data-id="login-provider-type"]').removeClass("disabled").children("span:first").text(textValue);
+            if ($('[data-id="login-provider-type"]').children("span:first").text() == "None") {
+                $("#update-defaultauthlogin-settings").prop("disabled", true);
+            }
+            $("#login-provider-type").prop("disabled", false);
+            $('[data-id="login-provider-type"]').removeClass("disabled").next().find("li").removeClass("disabled");
+            if ($('[data-id="login-provider-type"]').removeClass("disabled").next().find("li:first").text() == "None") {
+                $('[data-id="login-provider-type"]').removeClass("disabled").next().find("li:first").addClass("disabled");
+            }
+        }
+        else {
+            $("#login-provider-type").prop("disabled", true);
+            $('[data-id="login-provider-type"]').addClass("disabled").next().find("li:first").removeClass("disabled");
+            $('[data-id="login-provider-type"]').children("span:first").text("None");
+            $("#none-default").prop("disabled", false);
+            $("#update-defaultauthlogin-settings").prop("disabled", false);
+        }
+    });
+
     if ($("#active-directory-container").is(":visible")) {
         if (location.href.match(/openid-settings/)) {
             $("#openid-settings").tab("show");
             $("#update-oauth-settings").hide();
+            $("#update-defaultauthlogin-settings").hide();
+        }
+        else if (location.href.match(/oauth-settings/)) {
+            $("#oauth-settings").tab("show");
+            $("#update-openid-settings").hide();
+            $("#update-defaultauthlogin-settings").hide();
         }
         else {
-            $("#oauth-settings").tab("show");
+            $("#default-authentication-settings").tab("show");
+            $("#update-oauth-settings").hide();
             $("#update-openid-settings").hide();
         }
     }
@@ -102,6 +152,7 @@ $(document).ready(function () {
         if ($(this).attr("id") == "oauth-settings") {
             $("#update-oauth-settings").show();
             $("#update-openid-settings").hide();
+            $("#update-defaultauthlogin-settings").hide();
             var query = (window.location.search).toString();
             if (query != "?tab=oauth-settings") {
                 history.pushState(null, '', '?tab=oauth-settings');
@@ -110,11 +161,29 @@ $(document).ready(function () {
         else if ($(this).attr("id") == "openid-settings") {
             $("#update-openid-settings").show();
             $("#update-oauth-settings").hide();
+            $("#update-defaultauthlogin-settings").hide();
             var query = (window.location.search).toString();
             if (query != "?tab=openid-settings") {
                 history.pushState(null, '', '?tab=openid-settings');
             }
         }
+        else if ($(this).attr("id") == "default-authentication-settings") {
+            $("#update-defaultauthlogin-settings").show();
+            $("#update-openid-settings").hide();
+            $("#update-oauth-settings").hide();
+            var query = (window.location.search).toString();
+            if (query != "?tab=defaultauth-settings") {
+                history.pushState(null, '', '?tab=defaultauth-settings');
+            }
+        }
+        else if ($(this).attr("id") == "default-authentication-settings-info") {
+            $("#update-defaultauthlogin-settings").hide();
+            $("#update-openid-settings").hide();
+            $("#update-oauth-settings").hide();
+            var query = (window.location.search).toString();
+            if (query != "?tab=defaultauth-settings") {
+                history.pushState(null, '', '?tab=defaultauth-settings');
+            } updateauthsettingsUrl        }
         $(".success-message, .error-message").hide();
     });
 
@@ -154,11 +223,49 @@ $(document).ready(function () {
         }
     });
 
+    $(".update-oauth-or-openid-settings").click(function () {
+        $("#default-authentication-confirmation-diolog").ejDialog("close");
+        updateSetting(this.id);
+        defaultAuthentication = "";
+    });
+
     $(document).on("click", ".update-auth-settings", function () {
         $(".logo-container .validation-message").html("");
         var authPrefix = this.id === 'update-oauth-settings' ? 'oauth' : 'openid';
-        var authSettingsData = getAuthSettingsToPost(authPrefix);
+        var provider = this.id === 'update-oauth-settings' ? 'oauth 2.0' : 'openid connect';
+        if ((defaultAuthentication == provider) && !($("#enable-" + authPrefix).is(":checked"))) {
+            $("#default-authentication-confirmation-diolog").ejDialog("open");
+            $(".update-oauth-or-openid-settings").attr("id", authPrefix);
+        }
+        else {
+            updateSetting(authPrefix);
+        }
+    });
 
+    $(document).on("click", ".update-defaultauth-settings", function () {
+        var authProvider = $("#enable-defaultauthentication").is(":checked") ? $('[data-id="login-provider-type"]').children("span:first").text().toLowerCase() == "oauth 2.0" ? "CustomOAuth" : "CustomOIDC" : "DefaultAuthentication";
+
+        $.ajax({
+            type: "POST",
+            url: defaultauthsettingsUrl,
+            data: { AuthProvider: authProvider },
+            beforeSend: showWaitingPopup($("#server-app-container")),
+            success: function (result) {
+                hideWaitingPopup($("#server-app-container"));
+                defaultAuthentication = $('#login-provider-type').find(":selected").text().toLowerCase();
+                SuccessAlert(window.TM.App.LocalizationContent.AuthenticationSettings, window.TM.App.LocalizationContent.AuthSettingsUpdated, 7000);
+            },
+            error: function () {
+                hideWaitingPopup($("#server-app-container"));
+                WarningAlert(window.TM.App.LocalizationContent.AuthenticationSettings, window.TM.App.LocalizationContent.AuthSettingsUpdatedError, 7000);
+            }
+
+        });
+
+    });
+
+    function updateSetting(authPrefix) {
+        var authSettingsData = getAuthSettingsToPost(authPrefix);
         $.ajax({
             type: "POST",
             url: window.updateauthsettingsUrl,
@@ -194,7 +301,7 @@ $(document).ready(function () {
                 hideWaitingPopup($("#server-app-container"));
             }
         });
-    });
+    }
 
     function getAuthSettingsToPost(authPrefix) {        
         var isEnabled = $("input[name='" + authPrefix + "IsEnabled']").is(":checked");
@@ -225,7 +332,7 @@ $(document).ready(function () {
                     }
                 };
             }
-            else {
+            else if (authPrefix === 'openid') {
                 authSettingsData = {
                     IsEnabled: isEnabled,
                     OverwriteSiteSetting: $("input[name='openidOverwriteSiteSetting']").is(":checked"),
@@ -242,7 +349,13 @@ $(document).ready(function () {
                         GroupImportSettings: getGroupImportSettings("openid")
                     }
                 };
-            }            
+            }
+            else {
+                authSettingsData = {
+                    IsEnabled: isEnabled,
+                    LoginProvider: $("#login-provider-type").val()
+                };
+            }
         }
         else {
             authSettingsData = {
@@ -392,4 +505,8 @@ $(document).ready(function () {
 
         return groupImportSettings;
     }
-});  
+});
+
+function authenticationDialogBoxClose() {
+    $("#default-authentication-confirmation-diolog").ejDialog("close");
+}

@@ -156,7 +156,7 @@
 
 	  function renderQueryToolbar(args) {
     var $divsave = ej.buildTag('div', '', { 'margin': '1px 5px', 'float': 'left', 'display': 'inline-block', 'padding-top': '0.5px' }, {});
-    var saveButton = this.btnSaveTag = ej.buildTag('button.e-reportdesigner-dataset-btn', 'Save', {}, { id: ctrlId + '_query_save_btn' });
+    var saveButton = this.btnSaveTag = ej.buildTag('button.e-reportdesigner-dataset-btn', '[[[Save]]]', {}, { id: ctrlId + '_query_save_btn' });
     $divsave.append(saveButton);
     $(args.target).find('#' + ctrlId + '_div_dataset_save').before($divsave);
     saveButton.ejButton({

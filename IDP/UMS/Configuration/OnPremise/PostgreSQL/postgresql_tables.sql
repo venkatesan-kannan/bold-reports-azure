@@ -706,6 +706,7 @@ CREATE TABLE BOLDTC_AuthSettings (
     ModifiedBy uuid NOT NULL,
     CreatedDate timestamp NOT NULL,
     ModifiedDate timestamp NOT NULL,
+	IsDefaultAuthentication smallint NOT NULL DEFAULT '0',
     IsActive smallint NOT NULL,
     CONSTRAINT PK_BOLDTC_AUTHSETTINGS PRIMARY KEY (Id)
 )
@@ -832,6 +833,7 @@ INSERT INTO  BOLDTC_SqlElasticPool  ( PoolName , SqlServerId , DatabaseLimit , S
 INSERT into BOLDTC_AuthType  (Name, ModifiedDate, IsActive) VALUES (N'OAuth', now() at time zone 'utc', 1);
 INSERT into BOLDTC_AuthType  (Name, ModifiedDate, IsActive) VALUES (N'OIDC', now() at time zone 'utc', 1);
 INSERT into BOLDTC_AuthType  (Name, ModifiedDate, IsActive) VALUES (N'SAML', now() at time zone 'utc', 1);
+INSERT into BOLDTC_AuthType  (Name, ModifiedDate, IsActive) VALUES( N'DefaultAuth', now() at time zone 'utc', 1);
 
 INSERT into BOLDTC_AuthProvider  (Name, AuthTypeId, ModifiedDate, IsActive) VALUES (N'CustomOAuth', 1, now() at time zone 'utc', 1);
 INSERT into BOLDTC_AuthProvider  (Name, AuthTypeId, ModifiedDate, IsActive) VALUES (N'CustomOIDC', 2, now() at time zone 'utc', 1);

@@ -916,6 +916,7 @@ CREATE TABLE [BOLDTC_AuthSettings] (
     ModifiedBy uniqueidentifier NOT NULL,
     CreatedDate datetime NOT NULL,
     ModifiedDate datetime NOT NULL,
+	IsDefaultAuthentication bit NOT NULL Default 0,
     IsActive bit NOT NULL,
     CONSTRAINT [PK_BOLDTC_AuthSettings] PRIMARY KEY CLUSTERED
     (
@@ -1046,6 +1047,7 @@ INSERT INTO [BOLDTC_SqlElasticPool] ([PoolName],[SqlServerId],[DatabaseLimit],[S
 INSERT [BOLDTC_AuthType] ([Name], [ModifiedDate], [IsActive]) VALUES ( N'OAuth', GETUTCDATE(), 1);
 INSERT [BOLDTC_AuthType] ([Name], [ModifiedDate], [IsActive]) VALUES ( N'OIDC', GETUTCDATE(), 1);
 INSERT [BOLDTC_AuthType] ([Name], [ModifiedDate], [IsActive]) VALUES ( N'SAML', GETUTCDATE(), 1);
+INSERT [BOLDTC_AuthType]([Name],[ModifiedDate],[IsActive])VALUES( N'DefaultAuth', GETUTCDATE(), 1);
 
 INSERT [BOLDTC_AuthProvider] ([Name], [AuthTypeId], [ModifiedDate], [IsActive]) VALUES ( N'CustomOAuth', 1, GETUTCDATE(), 1);
 INSERT [BOLDTC_AuthProvider] ([Name], [AuthTypeId], [ModifiedDate], [IsActive]) VALUES ( N'CustomOIDC', 2, GETUTCDATE(), 1);

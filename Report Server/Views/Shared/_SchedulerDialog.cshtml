@@ -46,7 +46,7 @@
                         <div class="col-sm-12 col-xs-12 no-padding">
                             <div class="col-sm-2 col-xs-2 no-padding align-center"><label>[[[Category ]]]<span class="mandatory">*</span></label></div>
                             <div class="category-dropdown col-sm-4 col-xs-4">
-                                <select id="selected_category" data-live-search="true" title='[[[Select category]]]' name="categoryId" class="selectpicker col-sm-4 col-xs-4" data-size="5">
+                                <select id="selected_category" data-live-search="true" title='[[[Select category]]]' name="categoryId" class="selectpicker col-sm-4 col-xs-4" data-size="5" data-none-results-text="[[[No results match]]]">
                                     @if (HttpContext.Current.Request.QueryString["itemId"] != null)
                                     {
                                         <option value="@HttpContext.Current.Request.QueryString["categoryId"]" selected="selected">@HttpContext.Current.Request.QueryString["categoryName"]</option>
@@ -64,7 +64,7 @@
                         <div class="col-sm-12 col-xs-12 no-padding">
                             <div class="col-sm-2 col-xs-2 no-padding align-center"><label>[[[Report ]]]<span class="mandatory">*</span></label></div>
                             <div class="dashboard-dropdown col-sm-4 col-xs-4">
-                                <select id="selected_dashboard" data-live-search="true" title='[[[Select report]]]' name="dashboardId" class="selectpicker col-sm-4 col-xs-4" data-size="5">
+                                <select id="selected_dashboard" data-live-search="true" title='[[[Select report]]]' name="dashboardId" class="selectpicker col-sm-4 col-xs-4" data-size="5" data-none-results-text="[[[No results match]]]">
                                     @if (HttpContext.Current.Request.QueryString["actionType"].ToString().ToLower() == "create")
                                     {
 

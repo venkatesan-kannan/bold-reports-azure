@@ -59,7 +59,7 @@
                     <div class="col-xs-12 form-list entity-selection">
                         <label class="col-xs-4 heading app-textbox-label text-right">[[[Entity]]]</label>
                         <div class="col-xs-8 selection drop-down ">
-                            <select id="entity-selection" data-live-search="true" class="selectpicker" data-size="3" title="[[[Select entity]]]">
+                            <select id="entity-selection" data-live-search="true" class="selectpicker" data-size="3" title="[[[Select entity]]]" data-none-results-text="[[[No results match]]]">
                                 <option value="{{Entity.Id}}" ng-repeat="Entity in entities" data-entity-type="{{Entity.Type}}" ng-bind="Entity.Name"></option>
                             </select>
                         </div>
@@ -67,7 +67,7 @@
                     <div class="col-xs-12 form-list scope-selection">
                         <label class="col-xs-4 heading app-textbox-label text-right">[[[Scope]]]</label>
                         <div class="col-xs-8 selection drop-up">
-                            <select id="scope-selection" data-live-search="true" class="selectpicker" data-size="2" title="[[[Select scope]]]" disabled>
+                            <select id="scope-selection" data-live-search="true" class="selectpicker" data-size="2" title="[[[Select scope]]]" data-none-results-text="[[[No results match]]]" disabled>
                                 <option value="" title="" data-hidden="true"></option>
                             </select>
                         </div>

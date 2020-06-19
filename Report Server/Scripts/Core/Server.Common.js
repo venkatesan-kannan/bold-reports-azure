@@ -1,6 +1,5 @@
 ﻿
 function ajaxPostCall(type, apiUrl, requestData, beforeSendCallback, successCallback, errorCallback, completeCallback) {
-    debugger;
     if (embedConfig.IsEmbedCode) {
         if (type == "GET") {
             var itemRequestQuerString = jQuery.param(requestData);

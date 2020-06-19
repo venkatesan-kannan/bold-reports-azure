@@ -23,6 +23,7 @@
             $scope.allGroupDetails = groupDetails;
         });
         $(document).ready(function () {
+            GridLocalization();
             $("#search-group-users").val("");
             $("#Grid").ejGrid({
                 dataSource: ej.DataManager({ url: "@Url.Action("RefreshGroupUsers", "Group")?groupId="+groupId, adaptor: "UrlAdaptor" }),
@@ -34,7 +35,6 @@
                 allowSearching: true,
                 allowFiltering: true,
                 allowSelection: true,
-                locale: "en-us",
                 filterSettings: { filterType: "menu" },
                 actionBegin: "fnOnEditGroupActionBegin",
                 actionComplete: "fnOnUserGridActionComplete",
